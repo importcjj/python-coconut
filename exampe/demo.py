@@ -2,7 +2,10 @@
 import coconut
 
 
-app = coconut.Coconut()
+app = coconut.Coconut(
+    registry_host='192.168.50.3',
+    registry_port=8500,
+)
 
 
 @app.register()

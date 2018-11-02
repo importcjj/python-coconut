@@ -35,7 +35,8 @@ class Coconut(object):
             self.host = host
         self.port = port
         self.kind = 'coconut-runner'
-        self.registry = registry.Consul()
+
+        self.registry = registry.Consul(registry_host, registry_port)
         self.funcs = {}
 
     def __process(self, request, context):
