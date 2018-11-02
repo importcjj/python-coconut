@@ -21,7 +21,7 @@ class Result(object):
             self.value = ret
 
     def encode(self):
-        return json.dumps(self.value)
+        return json.dumps(self.value).encode()
     
 
 class Task(object):
