@@ -25,8 +25,8 @@ class Coconut(object):
             name='coconut-python-runner',
             host=None,
             port=6666,
-            registry_host=None,
-            registry_port=0):
+            registry_host='127.0.0.1',
+            registry_port=8500):
 
         self.name = name
         if host is None:
