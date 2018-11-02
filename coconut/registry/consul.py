@@ -12,12 +12,11 @@ class Registry(object):
         self.c = consul.Consul(host, port)
 
     def register(self, service):
-        res = self.c.agent.service.register(
+        self.c.agent.service.register(
             service.name,
             service_id=service.service_id,
             address=service.address,
             port=service.port)
-        print(type(res))
 
     def deregister(self, service):
         self.c.agent.service.deregister(
