@@ -29,7 +29,7 @@ class Task(object):
         
         self.f = f
         self.request = request
-        self.args = json.loads(request.args)
+        self.args = json.loads(request.args.decode())
     
     def __task_args(self):
         return [arg.get('value') for arg in self.args]
