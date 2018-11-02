@@ -1,5 +1,5 @@
 googleapis-common-protos==1.5.5
-grpc==0.3.post19
+grpc
 grpcio==1.16.0
 grpcio-tools==1.16.0
 protobuf==3.6.1
