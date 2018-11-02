@@ -52,14 +52,10 @@ class Coconut(object):
 
             return task_pb2.Reply(results=[task_pb2.Result(type=result.type, value=result.encode()) for result in results])
         except Exception as e:
-            print(e)
+            print("Call task failed {}".format(e))
             context.set_code(500)
             context.set_details(str(e))
             return task_pb2.Reply()
-
-        s = json.dumps('Hello, from coconut-python-runner')
-
-        results = [task_pb2.Result(type='string', value=s)]
 
     def serve(self):
         """
