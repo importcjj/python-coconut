@@ -15,3 +15,11 @@ class Service(object):
         self.kind = kind
         self.address = address
         self.port = port
+
+    def __str__(self):
+        return '<coconut.service.{}.{} [{}] {}:{}>'.format(
+            self.kind,
+            self.service_id,
+            self.name,
+            self.address,
+            self.port)

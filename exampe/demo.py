@@ -8,7 +8,7 @@ app = coconut.Coconut(
 )
 
 
-@app.register()
+@app.task()
 def add(a, b):
     """add task"""
     c = a + b
@@ -16,7 +16,7 @@ def add(a, b):
     return c
 
 
-@app.register(key="a6a099d8-dc0c-11e8-a49b-f21898282d25")
+@app.task(key="a6a099d8-dc0c-11e8-a49b-f21898282d25")
 def echo(p):
     """echo task"""
     print(p)
@@ -24,4 +24,7 @@ def echo(p):
 
 
 if __name__ == '__main__':
+    task_id = app.publish('coconut-python-runner', 'add',
+                          args=[1, coconut.Arg(2, typ='int64')])
+    print(task_id)
     app.serve()

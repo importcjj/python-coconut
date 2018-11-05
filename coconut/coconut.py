@@ -11,18 +11,20 @@ from coconut import registry
 from coconut.rpc_server import Runner
 from coconut.protos.runner import runner_pb2_grpc
 from coconut.protos.tasks import task_pb2
-from coconut.service import Service
+from coconut.backend import Backend
+from coconut.registry.service import Service
 from coconut.task import Task
 from coconut.utils import get_lan_ip, new_uuid
 
 
 _ONE_DAY_IN_SECONDS = 60 * 60 * 24
 
+_DEFAULT_SERVICE_NAME = 'coconut-python-runner'
 
 class Coconut(object):
     def __init__(
             self,
-            name='coconut-python-runner',
+            name=_DEFAULT_SERVICE_NAME,
             host=None,
             port=6666,
             registry_host='127.0.0.1',
@@ -37,6 +39,7 @@ class Coconut(object):
         self.kind = 'coconut-runner'
 
         self.registry = registry.Consul(registry_host, registry_port)
+        self.backend = Backend(self.registry)
         self.funcs = {}
 
     def __process(self, request, context):
@@ -51,7 +54,7 @@ class Coconut(object):
             task = Task(f, request)
             results = task.call()
 
-            return task_pb2.Reply(results=[task_pb2.Result(type=result.type, value=result.encode()) for result in results])
+            return task_pb2.Reply(results=[task_pb2.Result(type=result.type, value=result.encode_value()) for result in results])
         except Exception as e:
             print("Call task failed {}".format(e))
             context.set_code(500)
@@ -80,7 +83,11 @@ class Coconut(object):
             self.__deregister_service()
             server.stop(0)
 
-    def register(self, *args, **kwargs):
+    def publish(self, service_name, key, args=None, countdown=0):
+        response = self.backend.publish(service_name, key, args, countdown)
+        return response.uuid
+
+    def task(self, *args, **kwargs):
         """
         register task function
         """
